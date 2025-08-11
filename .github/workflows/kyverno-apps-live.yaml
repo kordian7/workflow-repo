@@ -10,6 +10,9 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+        with:
+          repository: kordian7/workflow-repo
+          ref: main
       - name: Download values.yaml
         uses: actions/download-artifact@v4
         with:
