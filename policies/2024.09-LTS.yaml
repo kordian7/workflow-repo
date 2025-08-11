@@ -1,0 +1,13 @@
+apiVersion: json.kyverno.io/v1alpha1
+kind: ValidatingPolicy
+metadata:
+  name: memory-limits-equal
+spec:
+  rules:
+    - name: memory-limits-equal
+      assert:
+        all:
+        - message: "requests.memory is not equal to limits.memory"
+          check:
+            ~.applications:
+              (@.values.resources.requests.memory == @.values.resources.limits.memory): true
