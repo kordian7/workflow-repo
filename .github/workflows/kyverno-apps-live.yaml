@@ -24,7 +24,7 @@ jobs:
         run: kyverno-json version
       - name: List files in the repository
         run: |
-          ls ${{ github.workspace }}
+          ls ${{ github.action_path }}
       - name: Run Kyverno validation
         shell: bash
         run: |
