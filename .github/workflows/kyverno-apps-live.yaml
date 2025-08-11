@@ -26,9 +26,6 @@ jobs:
       - name: Check install
         shell: bash
         run: kyverno-json version
-      - name: List files in the repository
-        run: |
-          ls ${{ github.action_path }}
       - name: Run Kyverno validation
         shell: bash
         run: |
@@ -40,27 +37,4 @@ jobs:
           else
             echo "Applications-live scan passed"
           fi
-      - name: Find artifact ID by name
-        id: find-artifact
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const { data } = await github.rest.actions.listArtifactsForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo
-            });
-            const artifact = data.artifacts.find(a => a.name === 'values');
-            if (artifact) {
-             core.setOutput('artifact-id', artifact.id);
-            }
-      - run: echo "Artifacts ID ${{ steps.find-artifact.outputs.artifact-id }}."
-      - name: Delete Artifact
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.actions.deleteArtifact({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              artifact_id: ${{ steps.find-artifact.outputs.artifact-id }}
-            });
       - run: echo "This job's status is ${{ job.status }}."
