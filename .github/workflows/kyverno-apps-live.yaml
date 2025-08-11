@@ -1,6 +1,10 @@
 name: Kyverno Scan
 on:
   workflow_call:
+    inputs:
+      topstack-version:
+        required: true
+        type: string
 jobs:
   kyverno-scan:
     runs-on: ubuntu-latest
@@ -29,7 +33,7 @@ jobs:
       - name: Run Kyverno validation
         shell: bash
         run: |
-          output=$(kyverno-json scan --payload values.yaml --policy ./policies/policy.yaml)
+          output=$(kyverno-json scan --payload values.yaml --policy ./policies/${{ inputs.config-path }}/policy.yaml)
           echo "$output"
           if echo "$output" | grep -q "FAILED"; then
             echo "Applications-live scan failed"
