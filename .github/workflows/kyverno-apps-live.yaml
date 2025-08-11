@@ -1,0 +1,36 @@
+name: Kyverno Scan
+on:
+  workflow_call:
+jobs:
+  kyverno-scan:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Download values.yaml
+        uses: actions/download-artifact@v4
+        with:
+          name: values
+          path: .
+      - name: Install kyverno-json
+        uses: kyverno/action-install-kyverno-json@main
+        with:
+          release: 'v0.0.1'
+      - name: Check install
+        shell: bash
+        run: kyverno-json version
+      - name: Run Kyverno validation
+        shell: bash
+        run: |
+          output=$(kyverno-json scan --payload values.yaml --policy /policies/policy.yaml)
+          echo "$output"
+          if echo "$output" | grep -q "FAILED"; then
+            echo "Applications-live scan failed"
+            exit 1
+          else
+            echo "Applications-live scan passed"
+          fi
+      - run: echo "This job's status is ${{ job.status }}."
