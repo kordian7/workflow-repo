@@ -27,5 +27,5 @@ jobs:
         uses: ./.github/actions/conftest
         with:
           files: values.yaml
-          policy: conftest-policies/${{ inputs.config-path }}/policy.rego
+          policy: conftest-policies/${{ inputs.topstack-version }}/policy.rego
       - run: echo "This job's status is ${{ job.status }}."
